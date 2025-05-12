@@ -1,6 +1,7 @@
 #include "xml_formatter.hpp"
 #include <string>
 #include <vector>
+#include <iostream>
 
 namespace groot2
 {
@@ -56,7 +57,11 @@ bool CustomXmlPrinter::VisitEnter(const tinyxml2::XMLElement& element,
     std::vector<const tinyxml2::XMLAttribute*> attributes;
     while(attribute)
     {
-      attributes.push_back(attribute);
+      if (std::string value = attribute->Value();!value.empty()){
+        attributes.push_back(attribute);
+      } else {
+        std::cout << "Skipping attribute '" << attribute->Name() << "' with empty string value in Element '" << element.Name() << "'" << std::endl;
+      }
       attribute = attribute->Next();
     }
     size_t const attr_count = attributes.size();
